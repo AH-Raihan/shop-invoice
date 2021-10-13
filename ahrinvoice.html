@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Shop Invoce</title>
+<link href="https://fonts.maateen.me/kalpurush/font.css" rel="stylesheet">
+<meta name="viewport" content="width=device-width,initial-scale=1" >
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Kalpurush',Arial , sans-serif;
+}
+h1{
+text-align:center;
+color:white;
+background:orange;
+padding:5px;
+}
+h5{
+text-align:center;
+color:#000;
+background:#ccc;
+padding:5px;
+}
+#print{
+padding:10px;
+background:#00cc00;
+color:white;
+border:none;
+outline:none;
+border-radius:1px;
+margin:5px;
+display:inline-block;
+}
+#clear {
+padding:10px ;
+border:none;
+background:red;
+color:white;
+float:right;
+margin:5px;
+outline:none;
+border-radius:1px;
+}
+
+.addProducts {
+margin:10px auto;
+display:flex;
+width:100%;
+}
+.addProducts div{
+width:100%;
+}
+.addProducts div select ,
+.addProducts div input 
+{
+padding:10px;
+display:inline-block;
+border:1px solid orange;
+outline:none;
+width:100%;
+}
+.addProducts div select {
+background:orange;
+color:white;
+border:1px solid orange;
+width:100%;
+}
+#add{
+border:1px solid black;
+outline:none;
+background:skyblue;
+color:black;
+padding:10px 15px;
+width:95%;
+float:right;
+}
+
+table {
+border-collapse:collapse;
+margin:5px auto;
+width:99%;
+overflow:hidden;
+}
+table td,
+table th
+{
+padding:8px;
+}
+table tfoot tr,
+table tfoot tr
+{
+border:1px solid orange;
+}
+#total {
+position:absolute;
+float:right;
+right:10px;
+margin:10px 0;
+font-weight:800;
+}
+.customer {
+display:flex;
+width:100%;
+margin:10px auto 0 auto;
+}
+.customer div{
+display:inline-block;
+padding:10px;
+width:100%;
+}
+.customer div:nth-child(2) {
+text-align:center;
+}
+.customer div:nth-child(3) {
+text-align:right;
+}
+.remove {
+color:#ccc;
+background:red;
+position:absolute;
+transition:.1s;
+display:none;
+}
+#Products:hover .remove {
+display:block;
+}
+
+@media print{
+ #print{
+  display:none;
+ }
+ #clear{
+ display:none;
+ }
+ .addProducts{
+  display:none;
+ }
+ h1{
+ color:black;
+ background:none;
+ }
+ h5{
+ color:#ccc;
+ background:none;
+ }
+}
+@media only screen and (max-width:500px){
+  .addProducts {
+  display:block;
+   width:98%;
+  }
+  #add{
+  width:99% !important;
+  margin:5px;
+  display:block;
+  }
+  .addProducts div:nth-child(2){
+  width:50%;
+  display:inline-block !important;
+  margin:5px auto;
+  }
+  .addProducts div:nth-child(3){
+  width:25%;
+  margin:0;
+  display:inline-block !important;
+  }
+  .addProducts div:nth-child(4){
+  display:inline-block !important;
+  width:20%;
+  margin:0;
+  }
+}
+</style>
+</head>
+<body>
+
+<h1>স্বপ্নের ছোয়া সুপার সপ</h1>
+<h5>মাদানী গার্ডেন, বালাদিল আমিন আবাসন, উত্তর আউচপাড়া, টংগী, গাজীপুর ।</h5>
+
+<button id="print" >Print</button>
+<button id="clear" >Clear</button>
+
+<div class="addProducts" id="addProducts" >
+  <div style="display:flex;"  ><input style="width:80%;display:inline-block;"  id="productName" type="text" placeholder="Product Name" >
+    <div style="width:20%;display:inline-block;border:none;" ><select id="productsNameSelect" >
+     <option value='{"name":" ","price":" ","kg":" "}' >Select</option>
+     <option value='{"name":"আলু ","price":21,"kg":"kg" }'  >আলু</option>
+     <option value='{"name":"পিয়াজ","price":70,"kg":"kg"}' >পিয়াজ</option>
+    </select>
+   </div>
+  </div>
+  <div><input id="price"  type="number"  placeholder="Price" ></div>
+  <div><input id="quantity" type="number"  value="1" placeholder="Quantity" ></div>
+  <div><select id="kg" >
+   <option value="kg" >kg</option>
+   <option value="pc" >pc</option>
+   <option value="ltr" >ltr</option>
+   <option value="ml" >ml</option>
+  </select>
+  </div>
+  <div><button id="add" >Add</button></div>
+ </div>
+ 
+ 
+ <div class="customer" >
+  <div contenteditable="true" ondblclick="this.innerHTML='';">Customer Name</div>
+  <div id="date" >00/00/0000</div>
+  <div id="time" >00:00</div>
+ </div>
+<table border="1" >
+<thead>
+ <br>
+ <tr>
+  <th width="60%" >Products</th>
+  <th width="15%" >PPP</th>
+  <th width="10%" >Quantity</th>
+  <th width="15%" >Price</th>
+ </tr>
+</thead>
+ 
+ 
+ <tbody id="Products" >
+  <!--<tr>
+  <td>কমলা</td>
+  <td>140 TK</td>
+  <td>5 KG</td>
+  <td><span class="TTaka" >600</span> taka</td>
+  <td class="remove" onclick="removeItem(this,600);">X</td>
+  </tr>
+  -->
+ </tbody>
+ 
+</table>
+
+<div id="total" >Total <span id="totalV" >600</span> TK</div>
+
+
+<script type="text/javascript">
+ const printBtn=document.getElementById('print');
+ printBtn.addEventListener('click',function(){
+ setTime();
+ 
+ window.print();
+ });
+ 
+ const clearBtn=document.getElementById('clear');
+ const addBtn=document.getElementById('add');
+ const table= document.getElementById('Products');
+ const productsNameSelect=document.getElementById('productsNameSelect');
+ var   totalV=document.getElementById('totalV');
+ var   kg=document.getElementById('kg');
+ const date=document.getElementById('date');
+ const time=document.getElementById('time');
+ 
+ 
+ function setTime(){
+ var today=new Date();
+  var ampm='AM';
+  
+  var hour=today.getHours();
+  var minute=today.getMinutes();
+  var dateT=today.getDate();
+  var month=today.getMonth()+1;
+  var year=today.getFullYear();
+  
+  if(minute > 11){
+  ampm='PM';
+  }else{
+  apmpm='AM';
+  }
+  if(minute<10){
+  minute='0'+minute;
+  }
+  
+     date.innerHTML= dateT+'/'+month+'/'+year;
+    time.innerHTML= hour+':'+ minute +' '+ampm;
+ }
+ setTime();
+ 
+clearBtn.onclick= function clear(){
+  table.innerHTML='';
+ }
+ 
+ productsNameSelect.addEventListener('change',function(){
+var thisValue= JSON.parse(this.value);
+
+  document.getElementById('productName').value=thisValue.name;
+  document.getElementById('price').value= thisValue.price;
+  kg.value=thisValue.kg;
+ });
+ 
+ addBtn.addEventListener('click',function(){
+
+  var product=document.getElementById('productName');
+  var price=document.getElementById('price');
+  var quantity=document.getElementById('quantity');
+  var kg=document.getElementById('kg');
+  var pT=price.value*quantity.value;
+ if(product.value === "" || price.value === "" || quantity.value === "" || kg.value === ""  ){
+ 
+ addBtn.style.background='red';
+ addBtn.innerHTML="Empty!";
+ setTimeout(function(){addBtn.innerHTML='Add';addBtn.style.background="skyblue"; },600);
+ 
+ }else{
+addBtn.style.background='#00cc00';
+ addBtn.innerHTML="Success";
+ setTimeout(function(){addBtn.innerHTML='Add';addBtn.style.background="skyblue"; },600);
+ 
+  table.innerHTML += `
+  <tr>
+   <td>${product.value}</td>
+   <td>${price.value} TK</td>
+   <td>${quantity.value} ${kg.value}</td>
+   <td><span class="TTaka" >${pT}</span> TK</td>
+   <td class="remove" onclick="removeItem(this,${pT});">X</td>
+  </tr>
+  `;
+  product.value="";
+  price.value="";
+  quantity.value=1;
+  total();
+  setTimeout(function(){addBtn.innerHTML='Add'; },1000);
+  }
+ });
+
+ function total(){
+    var TTaka =document.getElementsByClassName('TTaka');
+    var TotalSum=0;
+    for(let i=0;i < TTaka.length;i++){
+    var Ttaka = parseInt(TTaka[i].innerHTML);
+    
+    TotalSum +=Ttaka;
+    }
+    totalV.innerHTML=TotalSum;
+    
+ }
+ 
+ 
+ function removeItem(i,val){
+  i.parentNode.remove();
+  total();
+  
+ }
+ 
+ 
+ 
+ 
+ const objJson=[
+             {
+              "name":"আপেল",
+              "price":150,
+              "kg":"kg"
+             },
+             {
+              "name":"কমলা",
+              "price":160,
+              "kg":"kg"
+             },
+             {
+             "name":"আঙ্গুর",
+             "price":180,
+             "kg":"kg"
+             },
+             {
+             "name":"পিয়াজ",
+             "price":70,
+             "kg":"kg"
+             },
+             {
+             "name":"রসুন",
+             "price":80,
+             "kg":"kg"
+             },
+             {
+             "name":"মরিছ",
+             "price":30,
+             "kg":"kg"
+             },
+             {
+             "name":"তৈল",
+             "price":130,
+             "kg":"ltr"
+             }
+ ];
+
+var jsonC= JSON.stringify(objJson)
+var obj=JSON.parse(jsonC);
+
+for(let u=0;u < obj.length;u++){
+
+productsNameSelect.innerHTML +=`
+  <option value='{"name":" ${obj[u].name}","price": ${obj[u].price},"kg":"${obj[u].kg}" }'  > ${obj[u].name}</option>
+`;
+ 
+}
+</script>
+</body>
+</html>
